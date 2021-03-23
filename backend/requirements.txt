@@ -1,0 +1,10 @@
+# API Server
+fastapi==0.63.0
+requests==2.25.1
+gunicorn==20.0.4
+uvicorn[standard]==0.13.4
+
+
+# Database
+motor==2.3.1
+dnspython==2.1.0
