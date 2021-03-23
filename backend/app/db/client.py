@@ -21,10 +21,10 @@ async def get_db():
 async def connect_to_mongo():
     log.info("Connecting to MongoDB...")
     db.client = AsyncIOMotorClient(settings.db_url)
-    log.info("Connection created!")
+    log.info("MongoDB connection created!")
 
 
 async def close_connection():
-    log.info("Closing connection...")
+    log.info("Closing MongoDB connection...")
     db.client.close()
-    log.info("Connection closed!")
+    log.info("MongoDB connection closed!")

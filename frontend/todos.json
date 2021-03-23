@@ -1,116 +1,112 @@
-{
-  "ids": [
-    "todo_1614592246649",
-    "todo_1614591103488",
-    "todo_1614614664906",
-    "todo_1614592246648",
-    "todo_1614591103468",
-    "todo_1614614664916",
-    "todo_1614592246644",
-    "todo_1614591103478",
-    "todo_1614614665906",
-    "todo_1615605394824"
-  ],
-  "items": {
-    "todo_1614591103468": {
-      "created": "2021-3-3",
-      "date": "2021-03-13",
-      "deleted": false,
-      "finished": false,
-      "id": "todo_1614591103468",
-      "listId": "list_1614591103588",
-      "tags": ["django", "python"],
-      "task": "learn Django"
-    },
-    "todo_1614591103478": {
-      "created": "2021-3-4",
-      "date": "2021-03-03",
-      "deleted": false,
-      "finished": false,
-      "id": "todo_1614591103478",
-      "listId": "list_1614591103584",
-      "tags": ["react", "js"],
-      "task": "learn Next.js"
-    },
-    "todo_1614591103488": {
-      "created": "2021-3-1",
-      "date": "2021-03-03",
-      "deleted": false,
-      "finished": false,
-      "id": "todo_1614591103488",
-      "listId": "list_1614591103488",
-      "tags": ["react", "js"],
-      "task": "learn redux"
-    },
-    "todo_1614592246644": {
-      "created": "2021-3-4",
-      "date": "2021-03-10",
-      "deleted": false,
-      "finished": true,
-      "id": "todo_1614592246644",
-      "listId": "list_1614591103584",
-      "tags": ["js", "vue"],
-      "task": "learn vue"
-    },
-    "todo_1614592246648": {
-      "created": "2021-3-3",
-      "date": "2021-03-10",
-      "deleted": false,
-      "finished": true,
-      "id": "todo_1614592246648",
-      "listId": "list_1614591103588",
-      "tags": ["js", "node"],
-      "task": "learn node.js"
-    },
-    "todo_1614592246649": {
-      "created": "2021-03-01",
-      "date": "2021-03-10",
-      "deleted": false,
-      "finished": true,
-      "id": "todo_1614592246649",
-      "listId": "list_1614591103488",
-      "tags": ["js", "react"],
-      "task": "learn mobx"
-    },
-    "todo_1614614664906": {
-      "created": "2021-03-02",
-      "date": "2021-03-04",
-      "deleted": false,
-      "finished": false,
-      "id": "todo_1614614664906",
-      "listId": "list_1614591103488",
-      "tags": ["python"],
-      "task": "learn Python"
-    },
-    "todo_1614614664916": {
-      "created": "2021-03-03",
-      "date": "2021-03-04",
-      "deleted": false,
-      "finished": false,
-      "id": "todo_1614614664916",
-      "listId": "list_1614591103588",
-      "tags": ["python", "flask"],
-      "task": "learn Flask"
-    },
-    "todo_1614614665906": {
-      "created": "2021-03-04",
-      "date": "2021-03-04",
-      "deleted": false,
-      "finished": false,
-      "id": "todo_1614614665906",
-      "listId": "list_1614591103584",
-      "tags": ["js", "express", "node"],
-      "task": "learn express"
-    },
-    "todo_1615605394824": {
-      "created": "2021-03-13",
-      "date": "2021-03-15",
-      "deleted": false,
-      "finished": false,
-      "id": "todo_1615605394824",
-      "listId": "list_1614591103488",
-      "tags": ["python"],
-      "task": "learn python again"
-    }
+[
+  {
+    "createdAt": "2021-3-3",
+    "date": "2021-03-13",
+    "deleted": false,
+    "finished": false,
+    "id": "todo_1614591103468",
+    "index": 1,
+    "listId": "list_1614591103588",
+    "tags": ["django", "python"],
+    "task": "learn Django"
+  },
+  {
+    "createdAt": "2021-3-4",
+    "date": "2021-03-03",
+    "deleted": false,
+    "finished": false,
+    "id": "todo_1614591103478",
+    "index": 2,
+    "listId": "list_1614591103584",
+    "tags": ["react", "js"],
+    "task": "learn Next.js"
+  },
+  {
+    "createdAt": "2021-3-1",
+    "date": "2021-03-03",
+    "deleted": false,
+    "finished": false,
+    "id": "todo_1614591103488",
+    "index": 3,
+    "listId": "list_1614591103488",
+    "tags": ["react", "js"],
+    "task": "learn redux"
+  },
+  {
+    "createdAt": "2021-3-4",
+    "date": "2021-03-10",
+    "deleted": false,
+    "finished": true,
+    "id": "todo_1614592246644",
+    "index": 4,
+    "listId": "list_1614591103584",
+    "tags": ["js", "vue"],
+    "task": "learn vue"
+  },
+  {
+    "createdAt": "2021-3-3",
+    "date": "2021-03-10",
+    "deleted": false,
+    "finished": true,
+    "id": "todo_1614592246648",
+    "index": 5,
+    "listId": "list_1614591103588",
+    "tags": ["js", "node"],
+    "task": "learn node.js"
+  },
+  {
+    "createdAt": "2021-03-01",
+    "date": "2021-03-10",
+    "deleted": false,
+    "finished": true,
+    "id": "todo_1614592246649",
+    "index": 6,
+    "listId": "list_1614591103488",
+    "tags": ["js", "react"],
+    "task": "learn mobx"
+  },
+  {
+    "createdAt": "2021-03-02",
+    "date": "2021-03-04",
+    "deleted": false,
+    "finished": false,
+    "id": "todo_1614614664906",
+    "index": 7,
+    "listId": "list_1614591103488",
+    "tags": ["python"],
+    "task": "learn Python"
+  },
+  {
+    "createdAt": "2021-03-03",
+    "date": "2021-03-04",
+    "deleted": false,
+    "finished": false,
+    "id": "todo_1614614664916",
+    "index": 8,
+    "listId": "list_1614591103588",
+    "tags": ["python", "flask"],
+    "task": "learn Flask"
+  },
+  {
+    "createdAt": "2021-03-04",
+    "date": "2021-03-04",
+    "deleted": false,
+    "finished": false,
+    "id": "todo_1614614665906",
+    "index": 9,
+    "listId": "list_1614591103584",
+    "tags": ["js", "express", "node"],
+    "task": "learn express"
+  },
+  {
+    "createdAt": "2021-03-13",
+    "date": "2021-03-15",
+    "deleted": false,
+    "finished": false,
+    "id": "todo_1615605394824",
+    "index": 10,
+    "listId": "list_1614591103488",
+    "tags": ["python"],
+    "task": "learn python again"
   }
-}
+]

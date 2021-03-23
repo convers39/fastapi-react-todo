@@ -3,8 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import main
 
 from .core.config import get_settings, Settings
-from .db.client import connect_to_mongo, close_connection, get_db, AsyncIOMotorClient
-from .db.todo import fetch_todos
+from .db.client import connect_to_mongo, close_connection
+from .api.root import root_router as api_router
 
 app = FastAPI()
 settings = get_settings()
@@ -26,12 +26,4 @@ app.add_middleware(
 )
 
 
-@app.get('/ping')
-async def pong():
-    return {'ping': 'pong'}
-
-
-@app.get('/todos')
-async def get_todo(db: AsyncIOMotorClient = Depends(get_db)):
-    res = await fetch_todos(db)
-    return res
+app.include_router(api_router)
