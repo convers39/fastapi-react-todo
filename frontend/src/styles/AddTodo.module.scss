@@ -1,0 +1,84 @@
+.task_editor {
+  font-size: 1.4rem;
+  margin-top: 1rem;
+  .content {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px 10px 0;
+    cursor: text;
+    transition: all 0.1s ease;
+    .textarea {
+      display: flex;
+      align-items: center;
+      // font-size: 1.4rem;
+      line-height: 2rem;
+      border: none;
+      outline: none;
+      word-break: break-word;
+      padding-bottom: 10px;
+    }
+    .input {
+      line-height: 2.4rem;
+      font-size: 1.5rem;
+      padding: 0 0.4rem;
+      border: none;
+      width: 100%;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    &:focus-within {
+      border: 1px solid darkgray;
+    }
+
+    .extras {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding-bottom: 1rem;
+
+      .list_selector {
+        width: 20%;
+        // line-height: 1.8rem;
+        // padding: 0 1rem;
+        margin-left: 1rem;
+      }
+
+      .tag_selector {
+        min-width: 20%;
+        justify-self: flex-end;
+        // line-height: 1.8rem;
+        // padding: 0 1rem;
+        margin-left: 1rem;
+      }
+
+      .date_picker {
+        font-size: 1.4rem;
+        width: 12rem;
+        padding: 0.65rem 0.8rem;
+        line-height: 2rem;
+        border-radius: 0.5rem;
+        border: 1px solid lightgray;
+        &:focus,
+        &:active {
+          border-color: darkgray;
+        }
+      }
+    }
+  }
+
+  .actions {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: flex-start;
+  }
+}
+
+.add_todo_container {
+  // margin-top: 2rem;
+  padding-top: 1rem;
+  // border-top: 1.5px solid orange;
+}

@@ -1,0 +1,408 @@
+////////////////////////////////
+// top bar
+.topbar_container {
+  background: #3d3d3d;
+  color: white;
+  padding: 0 2rem;
+  height: 5rem;
+  font-size: 2rem;
+}
+
+.topbar_inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .topbar_left {
+    display: flex;
+    align-items: center;
+  }
+  .topbar_right {
+    display: flex;
+    align-items: center;
+  }
+}
+
+////////////////////////////////////////////////
+// side bar
+.sidebar_container {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  font-size: 2rem;
+  width: 25%;
+  height: calc(100vh - 5rem);
+  background-color: lightgrey;
+  padding-top: 3rem;
+  padding-left: 3.5rem;
+  li {
+    list-style: none;
+  }
+}
+
+.lists_container {
+  padding-bottom: 2rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid rgba(darkgray, 80%);
+}
+
+.list_filter {
+  .list_item {
+    padding: 0.4rem 0;
+    border-bottom: 1px solid lightgray;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+
+    &:hover {
+      cursor: pointer;
+      background-color: lighten(gray, 20%);
+    }
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background-color: gray;
+      border-radius: 50%;
+      margin: 0 0.8rem;
+    }
+  }
+}
+
+.filter_container {
+  padding: 1rem 0.4rem 1.8rem 0.5rem;
+  font-size: 1.8rem;
+  border-bottom: 1.5px solid rgba(darkgray, 80%);
+}
+
+.tab {
+  border-radius: 0.5rem;
+  width: 100%;
+  color: white;
+  overflow: hidden;
+}
+
+.tab_label {
+  display: -webkit-box;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: gray;
+  font-weight: 400;
+  cursor: pointer;
+  // position: relative;
+  /* Icon */
+
+  &:hover {
+    background: lighten(gray, 10%);
+  }
+
+  &::after {
+    content: '\276F';
+    width: 0.5rem;
+    height: 0.5rem;
+    text-align: center;
+    left: 50%;
+    // position: absolute;
+    transition: all 0.35s;
+  }
+}
+
+.tab_content {
+  max-height: 0;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  color: #2c3e50;
+  background: #ffffff;
+  transition: all 0.35s;
+}
+
+.checkbox {
+  position: absolute;
+  opacity: 0;
+  z-index: -1;
+  &:checked + .tab_label {
+    background: gray;
+  }
+
+  &:checked + .tab_label::after {
+    transform: rotate(90deg);
+    transform-origin: 0.5rem 1rem;
+  }
+
+  &:checked ~ .tab_content {
+    max-height: 100vh;
+    padding: 1rem;
+  }
+}
+.new_list_form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.text_input {
+  padding: 0.2rem 0.4rem;
+  margin-bottom: 0.5rem;
+  line-height: 2rem;
+  border: 1px solid lightgrey;
+  border-radius: 0.5rem;
+  // border-bottom-color: gray;
+  width: 100%;
+
+  &:focus {
+    outline: darken(lightgrey, 20%);
+  }
+}
+
+////////////////////////////////
+// main area
+.list_container {
+  padding: 0 3rem;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  .content {
+    display: block;
+    .todo_items {
+      margin-bottom: 3rem;
+      list-style: none;
+    }
+  }
+}
+.header {
+  padding: 2rem 4rem 0 4rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border-bottom: 1px solid #ddd;
+  width: 100%;
+
+  .content {
+    padding-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    margin: 0 auto;
+
+    small {
+      margin-left: 1rem;
+      font-size: 1.3rem;
+    }
+  }
+}
+
+.tag_container {
+  font-size: 1.2rem;
+  padding: 0.3rem 0.2rem;
+  margin: 0.3rem;
+  border: 0.15rem solid royalblue;
+  color: royalblue;
+  border-radius: 0.5rem;
+  cursor: pointer;
+
+  transition: box-shadow 300ms ease-in-out, color 300ms ease-in-out;
+
+  &:hover {
+    box-shadow: 0 0 40px 40px royalblue inset;
+    color: #fff;
+  }
+
+  span {
+    padding: 0.3rem;
+  }
+}
+.tag_selected {
+  box-shadow: 0 0 40px 40px royalblue inset;
+  color: #fff;
+}
+
+////////////////////////////////
+// New Todo Editor
+.task_editor {
+  font-size: 1.4rem;
+  margin-top: 1rem;
+  .content {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px 10px 0;
+    cursor: text;
+    transition: all 0.1s ease;
+    .textarea {
+      display: flex;
+      align-items: center;
+      // font-size: 1.4rem;
+      line-height: 2rem;
+      border: none;
+      outline: none;
+      word-break: break-word;
+      padding-bottom: 10px;
+    }
+    .input {
+      line-height: 2.4rem;
+      font-size: 1.5rem;
+      padding: 0 0.4rem;
+      border: none;
+      width: 100%;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    &:focus-within {
+      border: 1px solid darkgray;
+    }
+
+    .extras {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding-bottom: 1rem;
+
+      .list_selector {
+        width: 20%;
+        // line-height: 1.8rem;
+        // padding: 0 1rem;
+        margin-left: 1rem;
+      }
+
+      .tag_selector {
+        min-width: 20%;
+        justify-self: flex-end;
+        // line-height: 1.8rem;
+        // padding: 0 1rem;
+        margin-left: 1rem;
+      }
+
+      .date_picker {
+        font-size: 1.4rem;
+        width: 12rem;
+        padding: 0.65rem 0.8rem;
+        line-height: 2rem;
+        border-radius: 0.5rem;
+        border: 1px solid lightgray;
+        &:focus,
+        &:active {
+          border-color: darkgray;
+        }
+      }
+    }
+  }
+
+  .actions {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-start;
+  }
+}
+
+////////////////////////////////
+// Todo Item
+.task_item {
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+
+  .content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+
+    .label {
+      cursor: pointer;
+      font-size: 1rem;
+      width: 100%;
+      margin-right: 1rem;
+      display: block;
+      transition: all 0.2s ease-in-out;
+
+      &:hover {
+        opacity: 0.8;
+        transform: translateY(-0.15rem);
+      }
+
+      .checkbox {
+        float: left;
+        opacity: 0;
+      }
+      .text {
+        font-size: 1.5rem;
+        position: relative;
+        display: block;
+        transition: all 550ms ease-in-out;
+      }
+      .checkbox + .text::after {
+        content: '';
+        display: block;
+        border: 1px solid #497081;
+        border-radius: 1.4rem;
+        height: 1.4rem;
+        width: 1.4rem;
+        position: absolute;
+        left: -0.8rem;
+        top: 0.2rem;
+        z-index: 10;
+
+        transition: all 550ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      }
+
+      .checkbox + .text::before {
+        content: '✔';
+        display: block;
+        font-size: 2.2rem;
+        height: 1.4rem;
+        width: 1.4rem;
+        position: absolute;
+        left: -0.8rem;
+        top: -0.5rem;
+        z-index: 10;
+        opacity: 0;
+      }
+
+      .checkbox:checked + .text {
+        color: #ccc;
+        transition: all 550ms ease-in-out;
+      }
+
+      .checkbox:checked + .text::after {
+        opacity: 0;
+        height: 1.5rem;
+        width: 1.5rem;
+        top: -0.2rem;
+        right: -0.2rem;
+      }
+
+      .checkbox:checked + .text::before {
+        opacity: 1;
+        transition: all 550ms ease-in-out;
+      }
+    }
+
+    .tags {
+      flex: 1;
+      display: flex;
+      justify-content: space-around;
+      padding: 0.5rem 0;
+      margin-right: 2rem;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+}
+
+////////////////////////////////
+// Filter Clear
+.filter_clear_container {
+  margin: 0.5rem auto;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+}

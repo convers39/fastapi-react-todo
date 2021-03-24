@@ -1,0 +1,142 @@
+$red: #e74c3c;
+$white: #f0f6f7ff;
+$yellow: #f1c40f;
+$orange: #e95c20ff;
+$green: #2ecc71;
+$blue: #2460a7ff;
+$lightBlue: #669db3ff;
+$sky: #85b3d1ff;
+// $gray: #a59c94ff;
+$gray: #a89c94ff;
+
+.btn {
+  box-sizing: border-box;
+  appearance: none;
+  background-color: transparent;
+  border: 2px solid $red;
+  border-radius: 0.6rem;
+  color: $red;
+  cursor: pointer;
+  display: flex;
+  align-self: center;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1;
+  margin: 0.8rem;
+  padding: 0.5rem;
+  text-decoration: none;
+  text-align: center;
+  text-transform: uppercase;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+
+  &:hover,
+  &:focus {
+    color: $white;
+    outline: 0;
+  }
+}
+
+.delete {
+  transition: box-shadow 300ms ease-in-out, color 300ms ease-in-out;
+  &:hover {
+    box-shadow: 0 0 40px 40px $red inset;
+  }
+}
+
+.edit {
+  transition: box-shadow 300ms ease-in-out, color 300ms ease-in-out;
+  &:hover {
+    box-shadow: 0 0 40px 40px $yellow inset;
+  }
+  border-color: $yellow;
+  color: $yellow;
+}
+
+.expand {
+  padding: 0.5rem 1rem;
+  background: $orange;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    transform: scale(1.05);
+  }
+  border-color: $orange;
+  color: $white;
+}
+
+.sort {
+  margin: 0;
+  padding: 0.5rem 1rem;
+  border-color: darkgray;
+  color: $white;
+  box-shadow: 0 0 20px 20px darkgray inset, 0 0 0 0 darkgray;
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+    color: darkgray;
+    box-shadow: 0 0 5px 0 darkgray inset, 0 0 5px 1px darkgray;
+  }
+}
+
+.all_todo {
+  margin: 0;
+  display: block;
+  text-align: center;
+  font-size: 1.4rem;
+  padding: 0.8rem;
+  width: 100%;
+  text-align: center;
+  border-color: $lightBlue;
+  color: $white;
+  box-shadow: 0 0 20px 20px $lightBlue inset, 0 0 0 0 $lightBlue;
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+    color: $lightBlue;
+    transform: scale(1.05);
+    box-shadow: 0 0 5px 0 $lightBlue inset, 0 0 5px 1px $lightBlue;
+  }
+}
+
+.add {
+  margin: 0;
+  padding: 0.5rem 1.5rem;
+  border-color: $blue;
+  color: $white;
+  box-shadow: 0 0 20px 20px $blue inset, 0 0 0 0 $blue;
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+    opacity: 0.85;
+    transform: scale(1.05);
+  }
+}
+
+.create {
+  margin: 0.4rem 0;
+  padding: 0.5rem 1.5rem;
+  border-color: $gray;
+  color: $white;
+  box-shadow: 0 0 20px 20px $gray inset, 0 0 0 0 $gray;
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+}
+
+.cancel {
+  margin: 0 0.5rem;
+  padding: 0.5rem;
+
+  border: 2px solid gray;
+  color: gray;
+  transition: all 150ms ease-in-out, color 150ms ease-in-out;
+  &:hover {
+    opacity: 0.85;
+    transform: scale(1.05);
+    color: gray;
+    // box-shadow: 0 0 40px 40px $red inset;
+  }
+}
