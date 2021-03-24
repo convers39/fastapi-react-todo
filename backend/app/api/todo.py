@@ -14,10 +14,13 @@ from starlette.responses import JSONResponse
 from ..models.todo import Todo, TodoUpdate
 from ..db.client import get_db, AsyncIOMotorClient
 
-router = APIRouter()
+router = APIRouter(
+    prefix='/todos',
+    tags=['todos'],
+)
 
 
-@router.get('/todos')
+@router.get('/')
 async def fetch_todos(db: AsyncIOMotorClient = Depends(get_db)):
     todos = []
     cursor = db['TODOS'].find().sort('index')
@@ -27,7 +30,11 @@ async def fetch_todos(db: AsyncIOMotorClient = Depends(get_db)):
     return todos
 
 
-@router.post('/todos', status_code=HTTP_201_CREATED)
+@router.post(
+    '/',
+    status_code=HTTP_201_CREATED,
+    responses={201: {'description': 'Item created'}}
+)
 async def create_todo(
     db: AsyncIOMotorClient = Depends(get_db),
     new_todo: Todo = Body(..., embed=True)
@@ -45,7 +52,12 @@ async def create_todo(
     return JSONResponse(content={'result': result})
 
 
-@router.delete('/todos/{id}', status_code=HTTP_204_NO_CONTENT)
+@router.delete(
+    '/{id}',
+    status_code=HTTP_204_NO_CONTENT,
+    responses={404: {'description': 'Item not found'},
+               204: {'description': 'Item deleted'}}
+)
 async def delete_todo(
     db: AsyncIOMotorClient = Depends(get_db),
     id: str = Path(..., min_length=1)
@@ -61,7 +73,12 @@ async def delete_todo(
     return JSONResponse(content={'result': jsonable_encoder(res)}, status_code=HTTP_204_NO_CONTENT)
 
 
-@router.put('/todos/{id}', status_code=HTTP_200_OK)
+@router.put(
+    '/{id}',
+    status_code=HTTP_200_OK,
+    responses={404: {'description': 'Item not found'},
+               200: {'description': 'Item updated'}}
+)
 async def update_todo(
     db: AsyncIOMotorClient = Depends(get_db),
     id: str = Path(..., min_length=1),

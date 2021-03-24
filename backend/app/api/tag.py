@@ -12,7 +12,11 @@ from starlette.responses import JSONResponse
 from ..models.tag import Tag, TagUpdate
 from ..db.client import get_db, AsyncIOMotorClient
 
-router = APIRouter()
+router = APIRouter(
+    prefix='/tags',
+    tags=['tags'],
+    responses={404: {'description': 'Item not found'}}
+)
 
 
 @router.get('/tags')

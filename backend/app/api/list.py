@@ -13,7 +13,10 @@ from starlette.responses import JSONResponse
 from ..models.list import List, ListUpdate
 from ..db.client import get_db, AsyncIOMotorClient
 
-router = APIRouter()
+router = APIRouter(
+    prefix='/lists',
+    tags=['lists'],
+)
 
 
 @router.get('/lists')
@@ -49,7 +52,11 @@ async def create_list(
     return JSONResponse(content={'result': result})
 
 
-@router.delete('/lists/{id}', status_code=HTTP_204_NO_CONTENT)
+@router.delete(
+    '/lists/{id}',
+    status_code=HTTP_204_NO_CONTENT,
+    responses={404: {'description': 'Item not found'}}
+)
 async def delete_list(
     db: AsyncIOMotorClient = Depends(get_db),
     id: str = Path(..., min_length=1)
@@ -63,7 +70,11 @@ async def delete_list(
     return JSONResponse(content={'result': result})
 
 
-@router.put('/lists/{id}', status_code=HTTP_200_OK)
+@router.put(
+    '/lists/{id}',
+    status_code=HTTP_200_OK,
+    responses={404: {'description': 'Item not found'}}
+)
 async def update_list(
     db: AsyncIOMotorClient = Depends(get_db),
     id: str = Path(..., min_length=1),
