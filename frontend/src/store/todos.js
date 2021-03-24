@@ -24,6 +24,7 @@ class Todo {
     this.date = date || new Date().toLocaleDateString('en-CA')
     this.finished = false
     this.deleted = false
+    this.index = 0
   }
   toJSON() {
     return {
@@ -33,19 +34,20 @@ class Todo {
       tags: this.tags,
       date: this.date,
       finished: this.finished,
-      deleted: this.deleted
+      deleted: this.deleted,
+      index: this.index
     }
   }
 }
 export class TodoStore {
   @observable ids = []
-  // @observable items = {}
+  @observable items = {}
   @observable todos = []
 
   constructor() {
     makeObservable(this)
     this.ids = db.get('ids') || []
-
+    // this.lastIdx = null
     autorun(() => db.set('ids', this.ids))
   }
 
@@ -135,13 +137,28 @@ export class TodoStore {
     todo.finished = !todo.finished
   }
 
-  @action.bound updateTodoOrder(sourceId, destinationId) {
-    const sourceIndex = this.ids.indexOf(sourceId)
-    const destinationIndex = this.ids.indexOf(destinationId)
+  @action.bound async updateTodoOrder(sourceId, destinationId) {
+    const source = this.todos.find((todo) => todo.id === sourceId)
+    const destination = this.todos.find((todo) => todo.id === destinationId)
+    let temp = source.index
+    source.index = destination.index
+    destination.index = temp
 
-    let temp = this.ids[sourceIndex]
-    this.ids[sourceIndex] = this.ids[destinationIndex]
-    this.ids[destinationIndex] = temp
+    const response = await fetch(`http://localhost:8080/api/todos/reorder`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        source: source.index,
+        destination: destination.index
+      })
+    })
+    const data = await response.json()
+
+    runInAction(() => {
+      // this.fetchTodos()
+      console.log('update todo order', data)
+    })
+
     // [ids[sourceIndex],ids[destinationIndex]] = [ids[destinationIndex],ids[sourceIndex]]
   }
 }

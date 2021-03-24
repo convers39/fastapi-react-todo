@@ -41,8 +41,10 @@ async def create_todo(
 ):
 
     new_todo = new_todo.dict()
-    count = await db['TODOS'].count_documents({})
-    new_todo['index'] = count + 1
+    # insure new todo index is the last
+    count = await db['TODOS'].find().sort('index', -1).limit(1).to_list(length=1)
+    new_todo['index'] = count[0]['index'] + 1
+
     res = await db['TODOS'].insert_one(new_todo)
     if res.inserted_id:
         result = 'new todo has been created'
@@ -93,6 +95,33 @@ async def update_todo(
                             detail='item not found')
 
     return JSONResponse(content={'result': jsonable_encoder(TodoUpdate(**res))})
+
+
+@router.post(
+    '/reorder',
+    status_code=HTTP_200_OK,
+    responses={404: {'description': 'Item not found'},
+               200: {'description': 'Item updated'}}
+)
+async def reorder_todo(
+    db: AsyncIOMotorClient = Depends(get_db),
+    data: dict = {}
+):
+    source = data.get('source')
+    destination = data.get('destination')
+    source_todo = await db['TODOS'].find_one_and_update(
+        {'index': source}, {"$set": {'index': destination}},
+        return_document=ReturnDocument.AFTER
+    )
+    destination_todo = await db['TODOS'].find_one_and_update(
+        {'index': destination}, {"$set": {'index': source}},
+        return_document=ReturnDocument.AFTER
+    )
+    if not all([source_todo, destination_todo]):
+        raise HTTPException(status_code=HTTP_404_NOT_FOUND,
+                            detail='item not found')
+
+    return JSONResponse(content={'result': 'Items have been reordered'})
 
 
 @router.put(
