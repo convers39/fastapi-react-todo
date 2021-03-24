@@ -1,50 +1,72 @@
-import { action, observable, computed, makeObservable, autorun } from 'mobx'
-import db from '../utils/index'
+import { action, observable, makeObservable, runInAction } from 'mobx'
 
 class List {
-  @observable id
   @observable name
   constructor(name) {
     makeObservable(this)
     this.id = `list_${Date.now()}`
     this.name = name
-    this.created = new Date().toLocaleDateString('en-CA')
+  }
+  toJSON() {
+    return {
+      id: this.id,
+      name: this.name
+    }
   }
 }
 export class ListStore {
-  @observable ids = []
-  @observable items = {}
-
+  @observable lists = []
   constructor() {
     makeObservable(this)
-    this.ids = db.get('lists')?.ids || []
-    this.items = db.get('lists')?.items || {}
-    autorun(() => db.set('lists', { ids: this.ids, items: this.items }))
   }
 
-  @computed get lists() {
-    return Object.values(this.items)
+  @action.bound async fetchLists() {
+    const response = await fetch(`http://localhost:8080/api/lists`)
+    const data = await response.json()
+    runInAction(() => {
+      this.lists = data
+    })
   }
 
-  @action.bound fetchLists = () => {
-    const lists = db.get('lists') || {}
-    this.ids = lists.ids || []
-    this.items = lists.items || {}
-  }
-
-  @action.bound addList = (name) => {
+  @action.bound async addList(name) {
     const newList = new List(name)
-    this.ids.push(newList.id)
-    this.items[newList.id] = newList
+    const response = await fetch(`http://localhost:8080/api/lists`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ new_list: newList.toJSON() })
+    })
+    const data = await response.json()
+
+    runInAction(() => {
+      this.fetchLists()
+      console.log('add list data', data)
+    })
   }
 
-  @action.bound updateList = (id, listData) => {
-    this.items[id] = { ...this.items[id], ...listData }
+  @action.bound async updateList(id, listData) {
+    const response = await fetch(`http://localhost:8080/api/lists/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ list_data: listData })
+    })
+    const data = await response.json()
+
+    runInAction(() => {
+      this.fetchLists()
+      console.log('update list data', data)
+    })
   }
 
-  @action.bound deleteList = (id) => {
-    this.ids = this.ids.filter((listId) => listId !== id)
-    delete this.items[id]
+  @action.bound async deleteList(id) {
+    const response = await fetch(`http://localhost:8080/api/lists/${id}`, {
+      method: 'DELETE'
+    })
+    const data = await response.json()
+
+    runInAction(() => {
+      this.fetchLists()
+      console.log('delete list data', data)
+    })
   }
 }
 

@@ -27,6 +27,6 @@ class TodoUpdate(RWModel):
     task: str = ''
     tags: list = []
     date: str = datetime.now().strftime('%Y-%m-%d')  # bson does not have date type
-    finished: bool = False
-    deleted: bool = False
-    updatedAt: datetime
+    # finished: bool = False
+    # deleted: bool = False
+    updatedAt: datetime = datetime.now()

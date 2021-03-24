@@ -9,8 +9,6 @@ RUN npm install --legacy-peer-deps && npm cache clean --force && npm rebuild nod
 WORKDIR /app
 ADD . /app
 
-# RUN npm uninstall node-sass && npm install node-sass
-
 EXPOSE 8000
 EXPOSE 35729
 

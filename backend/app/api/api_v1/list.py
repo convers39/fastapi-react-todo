@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Body, Depends, Path
-from pydantic import BaseModel
 from starlette.exceptions import HTTPException
 from starlette.status import (
     HTTP_200_OK, HTTP_201_CREATED,
@@ -10,8 +9,8 @@ from starlette.status import (
 )
 from starlette.responses import JSONResponse
 
-from ..models.list import List, ListUpdate
-from ..db.client import get_db, AsyncIOMotorClient
+from ...models.list import List, ListUpdate
+from ...db.client import get_db, AsyncIOMotorClient
 
 router = APIRouter(
     prefix='/lists',
@@ -19,7 +18,7 @@ router = APIRouter(
 )
 
 
-@router.get('/lists')
+@router.get('')
 async def fetch_lists(db: AsyncIOMotorClient = Depends(get_db)):
     lists = []
     cursor = db['LISTS'].find().sort('index')
@@ -29,7 +28,7 @@ async def fetch_lists(db: AsyncIOMotorClient = Depends(get_db)):
     return lists
 
 
-@router.post('/lists', status_code=HTTP_201_CREATED)
+@router.post('', status_code=HTTP_201_CREATED)
 async def create_list(
     db: AsyncIOMotorClient = Depends(get_db),
     new_list: List = Body(..., embed=True)
@@ -53,7 +52,7 @@ async def create_list(
 
 
 @router.delete(
-    '/lists/{id}',
+    '/{id}',
     status_code=HTTP_204_NO_CONTENT,
     responses={404: {'description': 'Item not found'}}
 )
@@ -71,7 +70,7 @@ async def delete_list(
 
 
 @router.put(
-    '/lists/{id}',
+    '/{id}',
     status_code=HTTP_200_OK,
     responses={404: {'description': 'Item not found'}}
 )

@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 
 import { inject, observer } from 'mobx-react'
 import { TODO_STORE, APP_STORE } from '../store'
-import TodoFilter from '../store/filters/todos'
 import AddTodo from './AddTodo'
 import TodoDragDrop from './TodoDragDrop'
 
@@ -10,11 +9,19 @@ import styles from '../styles/style.module.scss'
 
 @observer
 class TodoList extends Component {
+  componentDidMount() {
+    this.props.fetchTodos()
+  }
   render() {
     const { todos } = this.props
+    console.log('todos', todos)
     return (
       <div className={styles.list_container}>
-        <TodoDragDrop todos={todos} />
+        {todos?.length ? (
+          <TodoDragDrop todos={todos} />
+        ) : (
+          <h1>Loading Todo...</h1>
+        )}
         <AddTodo />
       </div>
     )
@@ -22,15 +29,18 @@ class TodoList extends Component {
 }
 
 const TodoListContainer = inject((stores) => {
-  const filter = new TodoFilter(stores, TODO_STORE)
   const { currentListId, selectedTags } = stores[APP_STORE]
-  let todos = filter.getItemsByList(currentListId)
-
+  let { fetchTodos, todos } = stores[TODO_STORE]
+  // filter by list id
+  if (currentListId) {
+    todos = todos.filter((todo) => todo.listId === currentListId)
+  }
+  // filter by tags
   if (selectedTags.length) {
     const checkSubArray = (arr, sub) => sub.every((v) => arr.includes(v))
     todos = todos.filter((todo) => checkSubArray(todo.tags, selectedTags))
   }
-  return { todos }
+  return { todos, fetchTodos }
 })(TodoList)
 
 export default TodoListContainer

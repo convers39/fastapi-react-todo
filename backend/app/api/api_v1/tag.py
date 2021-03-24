@@ -9,8 +9,8 @@ from starlette.status import (
 )
 from starlette.responses import JSONResponse
 
-from ..models.tag import Tag, TagUpdate
-from ..db.client import get_db, AsyncIOMotorClient
+from ...models.tag import Tag, TagUpdate
+from ...db.client import get_db, AsyncIOMotorClient
 
 router = APIRouter(
     prefix='/tags',
@@ -19,7 +19,7 @@ router = APIRouter(
 )
 
 
-@router.get('/tags')
+@router.get('')
 async def fetch_tags(db: AsyncIOMotorClient = Depends(get_db)):
     tags = []
     cursor = db['TAGS'].find().sort('index')
@@ -29,7 +29,7 @@ async def fetch_tags(db: AsyncIOMotorClient = Depends(get_db)):
     return tags
 
 
-@router.post('/tags', status_code=HTTP_201_CREATED)
+@router.post('', status_code=HTTP_201_CREATED)
 async def create_tag(
     db: AsyncIOMotorClient = Depends(get_db),
     new_tag: Tag = Body(..., embed=True)
@@ -52,7 +52,7 @@ async def create_tag(
     return JSONResponse(content={'result': result})
 
 
-@router.delete('/tags/{id}', status_code=HTTP_204_NO_CONTENT)
+@router.delete('/{id}', status_code=HTTP_204_NO_CONTENT)
 async def delete_tag(
     db: AsyncIOMotorClient = Depends(get_db),
     id: str = Path(..., min_length=1)
@@ -66,7 +66,7 @@ async def delete_tag(
     return JSONResponse(content={'result': result})
 
 
-@router.put('/tags/{id}', status_code=HTTP_200_OK)
+@router.put('/{id}', status_code=HTTP_200_OK)
 async def update_tag(
     db: AsyncIOMotorClient = Depends(get_db),
     id: str = Path(..., min_length=1),

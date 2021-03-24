@@ -9,6 +9,9 @@ import styles from '../styles/SideBar.module.scss'
 @inject(TAG_STORE, TODO_STORE)
 @observer
 class TagFilter extends Component {
+  componentDidMount() {
+    this.props[TAG_STORE].fetchTags()
+  }
   handleDeleteTag = (tagId) => {
     const tag = this.props.tagStore.getTag(tagId)
     this.props.tagStore.deleteTag(tagId)
@@ -38,11 +41,5 @@ class TagFilter extends Component {
     )
   }
 }
-
-// const TagFilterContainer = inject((stores) => ({
-//   tags: Object.values(stores[TAG_STORE].tags.items),
-//   deleteTag: stores[TAG_STORE].deleteTag,
-//   fetchTags: stores[TAG_STORE].fetchTags
-// }))(TagFilter)
 
 export default TagFilter

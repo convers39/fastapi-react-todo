@@ -10,8 +10,8 @@ def to_camel(string: str) -> str:
 
 
 class DBModelMixin(BaseModel):
-    createdAt: Optional[datetime] = Field(..., alias="createdAt")
-    updatedAt: Optional[datetime] = Field(..., alias="updatedAt")
+    createdAt: Optional[datetime] = datetime.now()
+    updatedAt: Optional[datetime] = datetime.now()
 
 
 class RWModel(BaseModel):

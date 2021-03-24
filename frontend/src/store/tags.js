@@ -1,56 +1,89 @@
-import { action, observable, computed, makeObservable, autorun } from 'mobx'
-import db from '../utils/index'
+import {
+  action,
+  observable,
+  computed,
+  makeObservable,
+  runInAction,
+  autorun
+} from 'mobx'
 
 class Tag {
-  @observable id
   @observable name
   constructor(name) {
     makeObservable(this)
     this.id = `tag_${Date.now()}`
     this.name = name
-    this.created = new Date().toLocaleDateString('en-CA')
+  }
+  toJSON() {
+    return {
+      id: this.id,
+      name: this.name
+    }
   }
 }
 export class TagStore {
-  @observable ids = []
-  @observable items = {}
+  @observable tags = []
 
   constructor() {
     makeObservable(this)
-    this.ids = db.get('tags')?.ids || []
-    this.items = db.get('tags')?.items || {}
-    autorun(() => db.set('tags', { ids: this.ids, items: this.items }))
   }
 
-  @computed get tags() {
-    return Object.values(this.items)
+  @computed get tagCount() {
+    return this.tags.length
   }
 
-  @action.bound fetchTags() {
-    const tags = db.get('tags') || {}
-
-    this.ids = tags.ids || []
-    this.items = tags.items || {}
+  @action.bound async fetchTags() {
+    const response = await fetch(`http://localhost:8080/api/tags`)
+    const data = await response.json()
+    runInAction(() => {
+      this.tags = data
+    })
   }
 
-  @action.bound getTag = (id) => {
-    console.log('getTag', id, this.items, this.items[id])
-    return this.items[id] || {}
+  @action.bound getTag(id) {
+    const tag = this.tags.filter((tag) => tag.id === id)
+    return tag || {}
   }
 
-  @action.bound addTag(name) {
+  @action.bound async addTag(name) {
     const newTag = new Tag(name)
-    this.ids.push(newTag.id)
-    this.items[newTag.id] = newTag
+    const response = await fetch(`http://localhost:8080/api/tags`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ new_tag: newTag.toJSON() })
+    })
+    const data = await response.json()
+
+    runInAction(() => {
+      this.fetchTags()
+      console.log('add tag data', data)
+    })
   }
 
-  @action.bound updateTag(id, tagData) {
-    this.items[id] = { ...this.items[id], ...tagData }
+  @action.bound async updateTag(id, tagData) {
+    const response = await fetch(`http://localhost:8080/api/tags/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tag_data: tagData })
+    })
+    const data = await response.json()
+
+    runInAction(() => {
+      this.fetchTags()
+      console.log('update tag data', data)
+    })
   }
 
-  @action.bound deleteTag(id) {
-    this.ids = this.ids.filter((tagId) => tagId !== id)
-    delete this.items[id]
+  @action.bound async deleteTag(id) {
+    const response = await fetch(`http://localhost:8080/api/tags/${id}`, {
+      method: 'DELETE'
+    })
+    const data = await response.json()
+
+    runInAction(() => {
+      this.fetchTags()
+      console.log('delete tag data', data)
+    })
   }
 }
 

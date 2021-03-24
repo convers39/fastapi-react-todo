@@ -9,15 +9,15 @@ export class AppStore {
     makeObservable(this)
   }
 
-  @action.bound selectList = (id) => {
+  @action.bound selectList(id) {
     this.currentListId = id
   }
 
-  @action.bound updateEditingTodo = (id) => {
+  @action.bound updateEditingTodo(id) {
     this.editingTodoId = id
   }
 
-  @action.bound updateSelectedTags = (tag) => {
+  @action.bound updateSelectedTags(tag) {
     let currentTags = [...this.selectedTags]
     if (currentTags.includes(tag)) {
       currentTags = currentTags.filter((t) => t !== tag)
@@ -27,11 +27,11 @@ export class AppStore {
     this.selectedTags = currentTags
   }
 
-  @action.bound clearListFilter = () => {
+  @action.bound clearListFilter() {
     this.currentListId = null
   }
 
-  @action.bound clearTagsFilter = () => {
+  @action.bound clearTagsFilter() {
     this.selectedTags = []
   }
 }

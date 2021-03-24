@@ -1,8 +1,14 @@
-import { action, observable, computed, makeObservable, autorun } from 'mobx'
+import {
+  action,
+  observable,
+  computed,
+  makeObservable,
+  autorun,
+  runInAction
+} from 'mobx'
 import db from '../utils/index'
 
 class Todo {
-  @observable id
   @observable listId
   @observable task
   @observable tags
@@ -12,54 +18,88 @@ class Todo {
   constructor(listId, task, date, tags) {
     makeObservable(this)
     this.id = `todo_${Date.now()}`
-    this.task = task
     this.listId = listId
+    this.task = task
     this.tags = tags
     this.date = date || new Date().toLocaleDateString('en-CA')
     this.finished = false
     this.deleted = false
-    this.created = new Date().toLocaleDateString('en-CA')
+  }
+  toJSON() {
+    return {
+      id: this.id,
+      listId: this.listId,
+      task: this.task,
+      tags: this.tags,
+      date: this.date,
+      finished: this.finished,
+      deleted: this.deleted
+    }
   }
 }
 export class TodoStore {
   @observable ids = []
-  @observable items = {}
+  // @observable items = {}
+  @observable todos = []
 
   constructor() {
     makeObservable(this)
-    this.ids = db.get('todos')?.ids || []
-    this.items = db.get('todos')?.items || {}
-    autorun(() => db.set('todos', { ids: this.ids, items: this.items }))
+    this.ids = db.get('ids') || []
+
+    autorun(() => db.set('ids', this.ids))
   }
 
-  @computed get todos() {
-    return Object.values(this.items)
-  }
+  // @computed get todos() {
+  //   return Object.values(this.items)
+  // }
 
   @computed get finishedCount() {
     return this.todos.filter((todo) => todo.finished).length
   }
 
-  @action.bound fetchTodos() {
-    const todos = db.get('todos') || {}
-
-    this.ids = todos.ids || []
-    this.items = todos.items || {}
+  @action.bound async fetchTodos() {
+    const response = await fetch(`http://localhost:8080/api/todos`)
+    const data = await response.json()
+    // console.log('fetchTodos', data, response)
+    runInAction(() => {
+      this.todos = data
+    })
   }
 
-  @action.bound addTodo = (todoData) => {
+  @action.bound async addTodo(todoData) {
     const { listId, task, date, tags } = todoData
     const newTodo = new Todo(listId, task, date, tags)
+    console.log('new todo', JSON.stringify(newTodo.toJSON()))
+    const response = await fetch(`http://localhost:8080/api/todos`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ new_todo: newTodo.toJSON() })
+    })
+    const data = await response.json()
 
     this.ids.push(newTodo.id)
-    this.items[newTodo.id] = newTodo
+    runInAction(() => {
+      this.fetchTodos()
+      console.log('add todo data', data)
+    })
   }
 
-  @action.bound updateTodo = (id, todoData) => {
-    this.items[id] = { ...this.items[id], ...todoData }
+  @action.bound async updateTodo(id, todoData) {
+    console.log('todo data', id, todoData)
+    const response = await fetch(`http://localhost:8080/api/todos/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ todo_data: todoData })
+    })
+    const data = await response.json()
+
+    runInAction(() => {
+      this.fetchTodos()
+      console.log('update todo data', data)
+    })
   }
 
-  @action.bound deleteTodoTags = (tag) => {
+  @action.bound deleteTodoTags(tag) {
     this.todos.forEach((todo) => {
       if (todo.tags.includes(tag)) {
         todo.tags = todo.tags.filter((name) => name !== tag)
@@ -67,16 +107,35 @@ export class TodoStore {
     })
   }
 
-  @action.bound deleteTodo = (id) => {
+  @action.bound async deleteTodo(id) {
     this.ids = this.ids.filter((todoId) => todoId !== id)
-    delete this.items[id]
+    this.todos = this.todos.filter((todo) => todo.id !== id)
+
+    const response = await fetch(`http://localhost:8080/api/todos/${id}`, {
+      method: 'DELETE'
+    })
+    const data = await response.json()
+
+    runInAction(() => {
+      // this.fetchTodos()
+      console.log('delete todo data', data)
+    })
   }
 
-  @action.bound toggleFinished = (id) => {
-    this.items[id].finished = !this.items[id].finished
+  @action.bound async toggleFinished(id) {
+    const response = await fetch(
+      `http://localhost:8080/api/todos/toggle/${id}`,
+      { method: 'PUT' }
+    )
+    const data = await response.json()
+    runInAction(() => {
+      console.log('toggle todo data', data)
+    })
+    const todo = this.todos.find((t) => t.id === id)
+    todo.finished = !todo.finished
   }
 
-  @action.bound updateTodoOrder = (sourceId, destinationId) => {
+  @action.bound updateTodoOrder(sourceId, destinationId) {
     const sourceIndex = this.ids.indexOf(sourceId)
     const destinationIndex = this.ids.indexOf(destinationId)
 

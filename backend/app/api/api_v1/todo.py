@@ -11,8 +11,8 @@ from starlette.status import (
 )
 from starlette.responses import JSONResponse
 
-from ..models.todo import Todo, TodoUpdate
-from ..db.client import get_db, AsyncIOMotorClient
+from ...models.todo import Todo, TodoUpdate
+from ...db.client import get_db, AsyncIOMotorClient
 
 router = APIRouter(
     prefix='/todos',
@@ -20,7 +20,7 @@ router = APIRouter(
 )
 
 
-@router.get('/')
+@router.get('')
 async def fetch_todos(db: AsyncIOMotorClient = Depends(get_db)):
     todos = []
     cursor = db['TODOS'].find().sort('index')
@@ -31,7 +31,7 @@ async def fetch_todos(db: AsyncIOMotorClient = Depends(get_db)):
 
 
 @router.post(
-    '/',
+    '',
     status_code=HTTP_201_CREATED,
     responses={201: {'description': 'Item created'}}
 )
@@ -62,7 +62,6 @@ async def delete_todo(
     db: AsyncIOMotorClient = Depends(get_db),
     id: str = Path(..., min_length=1)
 ):
-
     res = await db['TODOS'].find_one_and_delete({'id': id})
 
     if not res:
@@ -84,10 +83,33 @@ async def update_todo(
     id: str = Path(..., min_length=1),
     todo_data: TodoUpdate = Body(..., embed=True)
 ):
-
-    res = await db['TODOS'].find_one_and_update({'id': id}, {"$set": todo_data.dict()}, return_document=ReturnDocument.AFTER)
+    print('update', todo_data.dict())
+    res = await db['TODOS'].find_one_and_update(
+        {'id': id}, {"$set": todo_data.dict()},
+        return_document=ReturnDocument.AFTER
+    )
     if not res:
         raise HTTPException(status_code=HTTP_404_NOT_FOUND,
                             detail='item not found')
 
     return JSONResponse(content={'result': jsonable_encoder(TodoUpdate(**res))})
+
+
+@router.put(
+    '/toggle/{id}',
+    status_code=HTTP_200_OK,
+    responses={404: {'description': 'Item not found'},
+               200: {'description': 'Item updated'}}
+)
+async def toggle_todo(
+    db: AsyncIOMotorClient = Depends(get_db),
+    id: str = Path(..., min_length=1),
+):
+    target = await db['TODOS'].find_one({'id': id})
+    finished = not target['finished']
+    res = await db['TODOS'].update_one({'id': id}, {"$set": {'finished': finished}})
+    if not res:
+        raise HTTPException(status_code=HTTP_404_NOT_FOUND,
+                            detail='item not found')
+
+    return JSONResponse(content={'result': f'Item {id} has been updated'})

@@ -7,35 +7,34 @@ import styles from '../styles/AddTodo.module.scss'
 @inject(TAG_STORE)
 @observer
 class SelectTag extends Component {
-  // componentDidMount() {
-  //   this.props[TAG_STORE].fetchTags()
-  // }
-
   handleChange = (options) => {
     const tags = options.map((obj) => obj.label.toLowerCase())
+
     // check if new tag is created, then fire add tag action
     const currentTags = this.props[TAG_STORE].tags.map((tag) => tag.name)
     const newTags = tags.filter((tag) => !currentTags.includes(tag))
     newTags.length && newTags.map((tag) => this.props[TAG_STORE].addTag(tag))
+
     // pass tag list to edit form
     this.props.onChange(tags)
   }
 
   render() {
-    let { defaultTags } = this.props
+    const { defaultTags } = this.props
     const { tags } = this.props[TAG_STORE]
 
     const options = tags.map((tag) => ({
       value: tag.id,
       label: tag.name
     }))
+    console.log('current tags', tags, defaultTags)
 
     // in edit mode retrieve default tags, defaultTags only contains tagName
-    defaultTags =
-      defaultTags &&
+    const tagValue =
+      defaultTags?.length &&
       defaultTags.map((tagName) => {
         const [tagObj] = tags.filter((tag) => tag.name === tagName)
-        return { value: tagObj.id, label: tagObj.name }
+        if (tagObj) return { value: tagObj.id, label: tagObj.name }
       })
 
     return (
@@ -44,7 +43,7 @@ class SelectTag extends Component {
         classNamePrefix='select'
         isMulti
         placeholder='Tags'
-        value={defaultTags || ''}
+        value={tagValue || ''}
         isClearable={true}
         isSearchable={true}
         name='tag-selector'
