@@ -27,7 +27,7 @@ class SelectTag extends Component {
       value: tag.id,
       label: tag.name
     }))
-    console.log('current tags', tags, defaultTags)
+    // console.log('current tags', tags, defaultTags)
 
     // in edit mode retrieve default tags, defaultTags only contains tagName
     const tagValue =

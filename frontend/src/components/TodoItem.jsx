@@ -9,14 +9,13 @@ import DisplayTodo from './DisplayTodo'
 @observer
 class TodoItem extends Component {
   render() {
-    const { todo } = this.props
-
+    const { todo, position } = this.props
     return (
       <div className={styles.task_item}>
         {this.props[APP_STORE].editingTodoId === todo.id ? (
           <EditTodo todoId={todo.id} initialData={todo} />
         ) : (
-          <DisplayTodo todo={todo} />
+          <DisplayTodo todo={todo} position={position} />
         )}
       </div>
     )

@@ -12,7 +12,6 @@ class Todo(DBModelMixin):
     date: str = datetime.now().strftime('%Y-%m-%d')  # bson does not have date type
     finished: bool = False
     deleted: bool = False
-    index: int = 0
 
     class Config(BaseConfig):
         allow_population_by_field_name = True
@@ -28,7 +27,4 @@ class TodoUpdate(RWModel):
     task: str = ''
     tags: list = []
     date: str = datetime.now().strftime('%Y-%m-%d')  # bson does not have date type
-    # finished: bool = False
-    # deleted: bool = False
-    index: int = 0
     updatedAt: datetime = datetime.now()

@@ -11,10 +11,10 @@ import styles from '../styles/style.module.scss'
 class TodoList extends Component {
   componentDidMount() {
     this.props.fetchTodos()
+    this.props.fetchIds()
   }
   render() {
     const { todos } = this.props
-    console.log('todos', todos)
     return (
       <div className={styles.list_container}>
         {todos?.length ? (
@@ -30,7 +30,7 @@ class TodoList extends Component {
 
 const TodoListContainer = inject((stores) => {
   const { currentListId, selectedTags } = stores[APP_STORE]
-  let { fetchTodos, todos } = stores[TODO_STORE]
+  let { fetchTodos, fetchIds, todos } = stores[TODO_STORE]
   // filter by list id
   if (currentListId) {
     todos = todos.filter((todo) => todo.listId === currentListId)
@@ -40,7 +40,7 @@ const TodoListContainer = inject((stores) => {
     const checkSubArray = (arr, sub) => sub.every((v) => arr.includes(v))
     todos = todos.filter((todo) => checkSubArray(todo.tags, selectedTags))
   }
-  return { todos, fetchTodos }
+  return { todos, fetchTodos, fetchIds }
 })(TodoList)
 
 export default TodoListContainer

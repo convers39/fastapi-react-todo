@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     testing: bool = os.getenv("TESTING", 0)
     db_name: str = os.getenv("DB_NAME", 'TODO_APP')
     db_url: AnyUrl = os.getenv("DB_URL")
+    domain: AnyUrl = os.getenv("DOMAIN", 'http://localhost:8080')
 
 
 @lru_cache()

@@ -19,12 +19,11 @@ export const reorder = (list, startIndex, endIndex) => {
 }
 
 export const onDragEnd = (result, todos) => {
-  // dropped outside the list
-  if (!result.destination) {
-    return
-  }
   const sourceIndex = result.source.index
   const destinationIndex = result.destination.index
+  if (!result.destination || sourceIndex === destinationIndex) {
+    return
+  }
   reorder(todos, sourceIndex, destinationIndex)
 
   const sourceId = todos[sourceIndex].id
