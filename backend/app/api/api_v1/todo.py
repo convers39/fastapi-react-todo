@@ -119,12 +119,6 @@ async def update_todo(
 
 
 @router.post(
-    '/{id}/index',
-    status_code=HTTP_200_OK,
-    responses={404: {'description': 'Item not found'},
-               200: {'description': 'Item updated'}}
-)
-@router.post(
     '/{id}/toggle',
     status_code=HTTP_200_OK,
     responses={404: {'description': 'Item not found'},
